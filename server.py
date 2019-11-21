@@ -8,6 +8,8 @@ from flask import Flask, request, g
 from flask_cors import CORS
 from auth import *
 from datetime import timedelta
+from config.config import config
+
 
 
 from flask_jwt import JWT, jwt_required, current_identity
@@ -38,4 +40,4 @@ def query_med_rec():
     #print('uncompress finished')
     return flask.jsonify({"file_name":name, "file_path":path})
 
-app.run(port='3001')
+app.run(port=config.port)
