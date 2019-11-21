@@ -33,9 +33,9 @@ def home():
 def query_med_rec():
 
     req = request.get_json()
-    print(req['path'])
-    uncompress_task_manager(req['path'], req['name'])
-    print('uncompress finished')
-    return flask.jsonify('ok')
+    #print(req['path'])
+    name, path = uncompress_task_manager(req['path'], req['name'])
+    #print('uncompress finished')
+    return flask.jsonify({"file_name":name, "file_path":path})
 
 app.run(port='3001')

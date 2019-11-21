@@ -6,35 +6,51 @@ from unrar import rarfile
 from zipfile import ZipFile
 import json
 
-new_path = ''
-
+public_data_path = '/Users/andrew/Desktop/andrewli/dzy/dzymap/data/'
+url_base = 'http://localhost:5001/data/'
 def uncompress_task_manager(path, name):
+    res_name = name
     print('task_manager')
-    print(path[-4:]) 
-    dir = os.path.join(new_path,name)
+    #print(path[-4:]) 
+    new_name = str(hash(name))
     if path[-4:] == '.zip':
         unzip_(path, name)
-        dbf2json(dir)
     if path[-4:] == '.rar':
         unrar_(path, name)
+    
+    dir = os.path.join(public_data_path, new_name)
+    os.rename(os.path.join(public_data_path, name), os.path.join(public_data_path, new_name))
+    #print(dir)
+    res_path = dbf2json(dir)
+
+    print(os.path.join((url_base+new_name+'/'), res_path))
+
+    res_path = os.path.join((url_base+new_name+'/'), res_path)
+    return res_name, res_path
+    
+
+    
+    
 
 def unrar_(path, name):
     rar = rarfile.RarFile(path)
-    rar.namelist()
+    rar.extractall(public_data_path)
 
 def unzip_(path, name):
-    print('zip')
+    #print('zip')
     zf = ZipFile(path, 'r')
-    zf.extractall(new_path)
+    print(zf.namelist()[0])
+    zf.extractall(public_data_path)
+    os.rename(os.path.join(public_data_path,zf.namelist()[0]), os.path.join(public_data_path, name))
 
 def dbf2json(dir):
     dbf_file = ''
-
     
     for file in os.listdir(dir):
         if file.endswith(".dbf"):
-            print(os.path.join(dir, file))
+            #print(os.path.join(dir, file))
             dbf_file = os.path.join(dir, file)
+            res_file=file
     
     f1 = open(dbf_file.replace('dbf','json'), 'w')
     
@@ -51,3 +67,5 @@ def dbf2json(dir):
             temp[key]=value
         dbf[xx[u'OBJECTID']]=temp
     json.dump(dbf,f1,ensure_ascii=False)
+
+    return res_file.replace('dbf','shp')
