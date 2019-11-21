@@ -1,0 +1,5 @@
+flask
+dbfread
+unrar
+flask_jwt
+flask_cors
