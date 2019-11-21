@@ -6,8 +6,12 @@ from unrar import rarfile
 from zipfile import ZipFile
 import json
 
-public_data_path = '/Users/andrew/Desktop/andrewli/dzy/dzymap/data/'
-url_base = 'http://localhost:5001/data/'
+from config.config import config
+
+
+public_data_path = config.public_data_path
+url_base = config.url_base
+
 def uncompress_task_manager(path, name):
     res_name = name
     print('task_manager')
